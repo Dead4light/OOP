@@ -1,0 +1,111 @@
+using System;
+using System.Windows.Forms;
+
+// Абстрактний базовий клас Integer
+public abstract class Integer
+{
+    // Віртуальний метод виводу на екран
+    public abstract void Print();
+}
+
+// Клас, що реалізує числа у десятковій системі
+public class Decimal : Integer
+{
+    private decimal value;
+
+    public Decimal(decimal value)
+    {
+        this.value = value;
+    }
+
+    // Перевизначення методу виводу на екран
+    public override void Print()
+    {
+        MessageBox.Show(value.ToString(), "Десяткове число");
+    }
+}
+
+// Клас, що реалізує числа у двійковій системі
+public class Binary : Integer
+{
+    private string value;
+
+    public Binary(string value)
+    {
+        this.value = value;
+    }
+
+    // Перевизначення методу виводу на екран
+    public override void Print()
+    {
+        MessageBox.Show(value, "Двійкове число");
+    }
+}
+
+public class MyForm : Form
+{
+    private TextBox decimalTextBox;
+    private TextBox binaryTextBox;
+    private Button showButton;
+
+    public MyForm()
+    {
+        Text = "Конвертер чисел";
+        Width = 300;
+        Height = 150;
+
+        Label decimalLabel = new Label();
+        decimalLabel.Text = "Десяткове число:";
+        decimalLabel.Left = 10;
+        decimalLabel.Top = 10;
+
+        decimalTextBox = new TextBox();
+        decimalTextBox.Left = 130;
+        decimalTextBox.Top = 10;
+
+        Label binaryLabel = new Label();
+        binaryLabel.Text = "Двійкове число:";
+        binaryLabel.Left = 10;
+        binaryLabel.Top = 40;
+
+        binaryTextBox = new TextBox();
+        binaryTextBox.Left = 130;
+        binaryTextBox.Top = 40;
+
+        showButton = new Button();
+        showButton.Text = "Показати";
+        showButton.Left = 10;
+        showButton.Top = 70;
+        showButton.Click += ShowButton_Click;
+
+        Controls.Add(decimalLabel);
+        Controls.Add(decimalTextBox);
+        Controls.Add(binaryLabel);
+        Controls.Add(binaryTextBox);
+        Controls.Add(showButton);
+    }
+
+    private void ShowButton_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            Decimal dec = new Decimal(decimal.Parse(decimalTextBox.Text));
+            Binary bin = new Binary(Convert.ToString(int.Parse(decimalTextBox.Text), 2));
+            dec.Print();
+            bin.Print();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "Помилка");
+        }
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Application.Run(new MyForm());
+    }
+}
+
